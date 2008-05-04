@@ -13,10 +13,10 @@ namespace TileEngineTest
     public class InGameGui : Microsoft.Xna.Framework.DrawableGameComponent
     {
         SpriteFont font;
-        TiledBackground tiledBackground;
+        HexagonTiledBackground tiledBackground;
         SpriteBatch spriteBatch;
 
-        public InGameGui(Game game, TiledBackground tiledBackground)
+        public InGameGui(Game game, HexagonTiledBackground tiledBackground)
             : base(game)
         {
             this.tiledBackground = tiledBackground;

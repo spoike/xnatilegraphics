@@ -15,7 +15,7 @@ namespace TileEngineTest
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        TiledBackground tiledBackground;
+        HexagonTiledBackground tiledBackground;
         InGameGui gameGui;
 
         public Game1()
@@ -26,7 +26,7 @@ namespace TileEngineTest
 
         protected override void Initialize()
         {
-            tiledBackground = new TiledBackground(this, 10, 25);
+            tiledBackground = new HexagonTiledBackground(this, 10, 25);
             tiledBackground.DrawOrder = 2;
             Components.Add(tiledBackground);
 
