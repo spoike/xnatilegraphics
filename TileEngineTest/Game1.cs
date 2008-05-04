@@ -15,11 +15,8 @@ namespace TileEngineTest
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        //Rectangle[,] sourceRectangles;
-        List<Rectangle> rects;
-        Texture2D tiles;
-        Texture2D selection;
-        SpriteFont font;
+        TiledBackground tiledBackground;
+        InGameGui gameGui;
 
         public Game1()
         {
@@ -29,40 +26,35 @@ namespace TileEngineTest
 
         protected override void Initialize()
         {
-            base.Initialize();
+            tiledBackground = new TiledBackground(this);
+            tiledBackground.DrawOrder = 2;
+            Components.Add(tiledBackground);
+
+            gameGui = new InGameGui(this, tiledBackground);
+            gameGui.DrawOrder = 1;
+            Components.Add(gameGui);
 
             IsMouseVisible = true;
-            rects = new List<Rectangle>(10);
 
-            for (int i = 0; i < 2; i++)
-            {
-                rects.Add( new Rectangle(i * 40, 0, 40, 40) );
-            }
-
-            //sourceRectangles = new Rectangle[2, 1];
-            //for (int i = 0; i < 2; i++)
-            //{
-            //    sourceRectangles[i, 0] = new Rectangle(i*40, 0, 40, 40);
-            //}
-
-
+            base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+        }
 
-            tiles = Content.Load<Texture2D>("080502_tiles");
-            selection = Content.Load<Texture2D>("selection_tile");
-            font = Content.Load<SpriteFont>("Lucida Console");
+        public SpriteBatch SpriteBatch
+        {
+            get
+            {
+                return spriteBatch;
+            }
         }
 
         protected override void UnloadContent()
         {
-            if (tiles != null)
-                tiles.Dispose();
-            if (selection != null)
-                selection.Dispose();
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -70,49 +62,13 @@ namespace TileEngineTest
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                int x = Mouse.GetState().X;
-                int y = Mouse.GetState().Y;
-                if ( MouseIsInside(x,y) )
-                {
-                    xSelect = (x - xOffset) / tileSize;
-                    ySelect = (y - yOffset) / tileSize;
-                }
-            }
-
             base.Update(gameTime);
         }
 
-        protected Boolean MouseIsInside(int x, int y)
-        {
-            return x > xOffset && y > yOffset && x < (length * tileSize) + xOffset && y < (height * tileSize) + yOffset;
-        }
-
-        //Rectangle tile1 = new Rectangle(0, 0, 40, 40);
-        //Rectangle tile2 = new Rectangle(40, 0, 40, 40);
-        int ySelect = 0;
-        int xSelect = 0;
-        int yOffset = 25;
-        int xOffset = 10;
-        int height = 10;
-        int length = 10;
-        int tileSize = 40;
 
         protected override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            spriteBatch.Begin();
-
-            int size = height * length;
-            for (int i = 0; i < size; i++)
-            {
-                spriteBatch.Draw(tiles, new Vector2(i*40%(length*40) + xOffset, (i/length)*40 + yOffset), rects[0], Color.White);
-            }
-            spriteBatch.Draw(selection, new Vector2(xSelect*40 + xOffset, ySelect*40 + yOffset), Color.White);
-            spriteBatch.DrawString(font, "Hai Wurldz. You have selected tile " + ySelect + "," + xSelect + ".", new Vector2(1.0f, 1.0f), Color.Black); 
-            spriteBatch.End();
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             base.Draw(gameTime);
         }
