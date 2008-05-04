@@ -61,6 +61,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="TiledBackground.cs" />
+    <Compile Include="TileGraphic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

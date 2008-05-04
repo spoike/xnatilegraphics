@@ -26,7 +26,7 @@ namespace TileEngineTest
 
         protected override void Initialize()
         {
-            tiledBackground = new TiledBackground(this);
+            tiledBackground = new TiledBackground(this, 10, 25);
             tiledBackground.DrawOrder = 2;
             Components.Add(tiledBackground);
 

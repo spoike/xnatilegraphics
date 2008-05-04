@@ -12,40 +12,36 @@ namespace TileEngineTest
 {
     public class TiledBackground : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        private Texture2D tiles;
+        private TileGraphic tiles;
         private Texture2D selection;
         private SpriteBatch spriteBatch;
-        private int xOffset = 10;
-        private int yOffset = 25;
+        private int xOffset;
+        private int yOffset;
         private int xSelect = 0;
         private int ySelect = 0;
         private int height = 10;
         private int length = 10;
-        private int tileSize = 40;
-        private List<Rectangle> rects;
+        private int tileSize;
 
-        public TiledBackground(Game game)
+        public TiledBackground(Game game, int xOffset, int yOffset)
             : base(game)
         {
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
         }
 
         public override void Initialize()
         {
             base.Initialize();
 
-            rects = new List<Rectangle>(10);
-
-            for (int i = 0; i < 2; i++)
-            {
-                rects.Add(new Rectangle(i * 40, 0, 40, 40));
-            }
         }
 
         protected override void LoadContent()
         {
             Game.Content.RootDirectory = "Content";
-            tiles = Game.Content.Load<Texture2D>("080502_tiles");
+            tiles = new TileGraphic(Game.Content.Load<Texture2D>("tiles"), 2, 1);
+            tileSize = tiles.TileWidth;
             selection = Game.Content.Load<Texture2D>("selection_tile");
             loaded = true;
         }
@@ -74,9 +70,16 @@ namespace TileEngineTest
                 int size = height * length;
                 for (int i = 0; i < size; i++)
                 {
-                    spriteBatch.Draw(tiles, new Vector2(i * 40 % (length * 40) + xOffset, (i / length) * 40 + yOffset), rects[0], Color.White);
+                    spriteBatch.Draw(
+                        tiles.Texture, 
+                        new Vector2(i * tileSize % (length * tileSize) + xOffset, (i / length) * tileSize + yOffset), 
+                        tiles.Tile(1,0), 
+                        Color.White);
                 }
-                spriteBatch.Draw(selection, new Vector2(xSelect * 40 + xOffset, ySelect * 40 + yOffset), Color.White);
+                spriteBatch.Draw(
+                    selection, 
+                    new Vector2(xSelect * tileSize + xOffset, ySelect * tileSize + yOffset), 
+                    Color.White);
 
                 spriteBatch.End();
             }

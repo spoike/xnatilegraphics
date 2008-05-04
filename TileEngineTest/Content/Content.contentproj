@@ -32,7 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="080502_tiles.png">
-      <Name>080502_tiles</Name>
+      <Name>tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
