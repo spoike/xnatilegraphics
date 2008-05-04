@@ -22,6 +22,7 @@ namespace TileEngineTest
         private int height = 10;
         private int length = 10;
         private int tileSize;
+        private int[,] tileContent;
 
         public TiledBackground(Game game, int xOffset, int yOffset)
             : base(game)
@@ -29,12 +30,21 @@ namespace TileEngineTest
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
             this.xOffset = xOffset;
             this.yOffset = yOffset;
+
+            tileContent = new int[length, height];
         }
 
         public override void Initialize()
         {
             base.Initialize();
 
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    tileContent[i, j] = 0;
+                }
+            }
         }
 
         protected override void LoadContent()
@@ -68,13 +78,16 @@ namespace TileEngineTest
                 spriteBatch.Begin();
 
                 int size = height * length;
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < length; i++)
                 {
-                    spriteBatch.Draw(
-                        tiles.Texture, 
-                        new Vector2(i * tileSize % (length * tileSize) + xOffset, (i / length) * tileSize + yOffset), 
-                        tiles.Tile(1,0), 
-                        Color.White);
+                    for (int j = 0; j < height; j++)
+                    {
+                        spriteBatch.Draw(
+                            tiles.Texture,
+                            new Vector2(i * tileSize + xOffset, j * tileSize + yOffset),
+                            tiles.Tile(tileContent[i, j], 0),
+                            Color.White);
+                    }
                 }
                 spriteBatch.Draw(
                     selection, 
@@ -85,9 +98,11 @@ namespace TileEngineTest
             }
         }
 
+        private bool isPressed = false;
+
         public override void Update(GameTime gameTime)
         {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (!isPressed && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 int x = Mouse.GetState().X;
                 int y = Mouse.GetState().Y;
@@ -95,7 +110,13 @@ namespace TileEngineTest
                 {
                     xSelect = (x - xOffset) / tileSize;
                     ySelect = (y - yOffset) / tileSize;
+                    tileContent[xSelect, ySelect] = tileContent[xSelect, ySelect] + 1;
                 }
+                isPressed = true;
+            }
+            else if (isPressed && Mouse.GetState().LeftButton == ButtonState.Released)
+            {
+                isPressed = false;
             }
 
             base.Update(gameTime);

@@ -38,7 +38,7 @@ namespace TileEngineTest
 
         public Rectangle Tile(int x, int y)
         {
-            return sources[x, y];
+            return sources[x % cols, y % rows];
         }
 
         public int TileWidth
