@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileEngineTest", "TileEngineTest\TileEngineTest.csproj", "{70096404-368C-45AE-9782-E09D5E8F96B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70096404-368C-45AE-9782-E09D5E8F96B5}.Debug|x86.ActiveCfg = Debug|x86
+		{70096404-368C-45AE-9782-E09D5E8F96B5}.Debug|x86.Build.0 = Debug|x86
+		{70096404-368C-45AE-9782-E09D5E8F96B5}.Release|x86.ActiveCfg = Release|x86
+		{70096404-368C-45AE-9782-E09D5E8F96B5}.Release|x86.Build.0 = Release|x86
+		{98349141-8D5D-4CC2-BAF5-FD0F15BCC752}.Debug|x86.ActiveCfg = Debug|x86
+		{98349141-8D5D-4CC2-BAF5-FD0F15BCC752}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
