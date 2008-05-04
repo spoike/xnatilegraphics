@@ -14,11 +14,13 @@ namespace TileEngineTest
     {
         SpriteFont font;
         TiledBackground tiledBackground;
+        SpriteBatch spriteBatch;
 
         public InGameGui(Game game, TiledBackground tiledBackground)
             : base(game)
         {
             this.tiledBackground = tiledBackground;
+            spriteBatch = new SpriteBatch(game.GraphicsDevice);
         }
         
         public InGameGui(Game game)
@@ -35,7 +37,6 @@ namespace TileEngineTest
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch spriteBatch = ((Game1)Game).SpriteBatch;
             spriteBatch.Begin();
 
             Point p = tiledBackground.SelectedTile;
@@ -45,5 +46,16 @@ namespace TileEngineTest
             base.Draw(gameTime);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (spriteBatch != null)
+            {
+                spriteBatch.Dispose();
+            }
+            if (tiledBackground != null)
+            {
+                tiledBackground.Dispose();
+            }
+        }
     }
 }

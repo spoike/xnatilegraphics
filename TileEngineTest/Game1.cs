@@ -44,17 +44,20 @@ namespace TileEngineTest
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
-        public SpriteBatch SpriteBatch
-        {
-            get
-            {
-                return spriteBatch;
-            }
-        }
-
         protected override void UnloadContent()
         {
-
+            if (spriteBatch != null)
+            {
+                spriteBatch.Dispose();
+            }
+            if (tiledBackground != null)
+            {
+                tiledBackground.Dispose();
+            }
+            if (gameGui != null)
+            {
+                gameGui.Dispose();
+            }
         }
 
         protected override void Update(GameTime gameTime)

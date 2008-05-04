@@ -59,9 +59,13 @@ namespace TileEngineTest
         protected override void Dispose(bool disposing)
         {
             if (tiles != null)
+            {
                 tiles.Dispose();
+            }
             if (selection != null)
+            {
                 selection.Dispose();
+            }
         }
 
         protected Boolean MouseIsInside(int x, int y)
