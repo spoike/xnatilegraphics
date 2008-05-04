@@ -45,6 +45,7 @@ namespace TileEngineTest
                     tileContent[i, j] = 0;
                 }
             }
+            tileContent[2, 2] = 1;
         }
 
         protected override void LoadContent()
