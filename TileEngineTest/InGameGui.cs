@@ -39,8 +39,8 @@ namespace TileEngineTest
         {
             spriteBatch.Begin();
 
-            Point p = tiledBackground.SelectedTile;
-            spriteBatch.DrawString(font, "Hai Wurldz. You have selected tile " + p.X + "," + p.Y + ".", new Vector2(1.0f, 1.0f), Color.Black);
+            Point selected = tiledBackground.SelectedTile;
+            spriteBatch.DrawString(font, "Hai Wurldz. You have selected tile " + selected.X + "," + selected.Y + ".", new Vector2(1.0f, 1.0f), Color.Black);
             spriteBatch.End();
 
             base.Draw(gameTime);

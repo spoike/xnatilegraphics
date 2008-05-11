@@ -14,11 +14,11 @@ namespace TileEngineTest
     {
         private TileGraphic tiles;
         private Texture2D selection;
+        private Texture2D mask;
         private SpriteBatch spriteBatch;
+        private Point selected;
         private int xOffset;
         private int yOffset;
-        private int xSelect = 0;
-        private int ySelect = 0;
         private int height = 10;
         private int length = 10;
         private int tileSize;
@@ -56,6 +56,7 @@ namespace TileEngineTest
             tileSize = tiles.TileWidth;
             tileHeight = tiles.TileHeight;
             selection = Game.Content.Load<Texture2D>("hexa_select");
+            mask = Game.Content.Load<Texture2D>("hexa_mask");
             loaded = true;
         }
 
@@ -71,8 +72,10 @@ namespace TileEngineTest
             }
         }
 
-        protected Boolean MouseIsInside(int x, int y)
+        protected Boolean MouseIsInside(Point mousePosition)
         {
+            int x = mousePosition.X;
+            int y = mousePosition.Y;
             return x > xOffset && y > yOffset && x < (length * tileSize) + xOffset && y < (height * tileSize) + yOffset;
         }
 
@@ -98,7 +101,7 @@ namespace TileEngineTest
                 }
                 spriteBatch.Draw(
                     selection, 
-                    new Vector2(xSelect * tileWidth + xOffset, ySelect * tileSize + ( xSelect % 2 ) * (tileHeight / 2) + yOffset), 
+                    new Vector2(selected.X * tileWidth + xOffset, selected.Y * tileSize + ( selected.X % 2 ) * (tileHeight / 2) + yOffset), 
                     Color.White);
 
                 spriteBatch.End();
@@ -111,13 +114,11 @@ namespace TileEngineTest
         {
             if (!isPressed && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                int x = Mouse.GetState().X;
-                int y = Mouse.GetState().Y;
-                if (MouseIsInside(x, y))
+                Point mousePosition = new Point(Mouse.GetState().X, Mouse.GetState().Y);
+                if (MouseIsInside(mousePosition))
                 {
-                    xSelect = (x - xOffset) / tileWidth;
-                    ySelect = (y - yOffset) / tileSize;
-                    tileContent[xSelect, ySelect] = tileContent[xSelect, ySelect] + 1;
+                    selected = Select(mousePosition);
+                    MutateTile(selected);
                 }
                 isPressed = true;
             }
@@ -129,11 +130,34 @@ namespace TileEngineTest
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Fetch the selected tile's coordinate. Uses tiling as base instead of screen pixels.
+        /// </summary>
+        /// <param name="mousePosition">Position of mouse</param>
+        /// <returns>Point coordinates with tiling as base</returns>
+        public Point Select(Point mousePosition)
+        {
+            int xSelect = (mousePosition.X - xOffset) / tileWidth;
+            int ySelect = (mousePosition.Y - yOffset) / tileSize;
+            return new Point(xSelect, ySelect);
+        }
+
+        /// <summary>
+        /// Mutates the selected tile state
+        /// </summary>
+        /// <param name="selected">The selected tile's coordinates with tiling as base</param>
+        public void MutateTile(Point selected)
+        {
+            int x = selected.X;
+            int y = selected.Y;
+            tileContent[x, y] = tileContent[x, y] + 1;
+        }
+
         public Point SelectedTile
         {
             get
             {
-                return new Point(xSelect, ySelect);
+                return selected;
             }
         }
     }
