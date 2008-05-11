@@ -227,7 +227,10 @@ namespace TileEngineTest
         {
             int x = selected.X;
             int y = selected.Y;
-            tileContent[x, y] = tileContent[x, y] + 1;
+            if (x > -1 && x < 10 && y > -1 && y < 10)
+            {
+                tileContent[x, y] = tileContent[x, y] + 1;
+            }
         }
     }
 }
