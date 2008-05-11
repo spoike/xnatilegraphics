@@ -171,7 +171,14 @@ namespace TileEngineTest
         {
             // Get the tile
             int xSelect = (mousePosition.X - xOffset) / tileWidth;
-            int ySelect = (mousePosition.Y - yOffset) / tileSize;
+            
+            int y = mousePosition.Y;
+            // All odd rows have an offset of half the height
+            if ( xSelect % 2 == 1 )
+            {
+                y -= (tileSize / 2);
+            }
+            int ySelect = (y - yOffset) / tileSize;
             
             // Get the offset values within the tile
             int xSelectOffset = (mousePosition.X - xOffset) % tileWidth;
