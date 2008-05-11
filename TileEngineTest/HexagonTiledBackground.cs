@@ -90,7 +90,7 @@ namespace TileEngineTest
             }
         }
 
-        protected Boolean MouseIsInside(Point mousePosition)
+        private Boolean MouseIsInsideBoard(Point mousePosition)
         {
             int x = mousePosition.X;
             int y = mousePosition.Y;
@@ -133,7 +133,7 @@ namespace TileEngineTest
             if (!isPressed && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 Point mousePosition = new Point(Mouse.GetState().X, Mouse.GetState().Y);
-                if (MouseIsInside(mousePosition))
+                if (MouseIsInsideBoard(mousePosition))
                 {
                     selected = Select(mousePosition);
                     MutateTile(selected);
@@ -163,15 +163,53 @@ namespace TileEngineTest
         }
 
         /// <summary>
-        /// Fetch the selected tile's coordinate. Uses tiling as base instead of screen pixels.
+        /// Determines the selected tile.
         /// </summary>
         /// <param name="mousePosition">Position of mouse</param>
         /// <returns>Point coordinates with tiling as base</returns>
         public Point Select(Point mousePosition)
         {
+            // Get the tile
             int xSelect = (mousePosition.X - xOffset) / tileWidth;
             int ySelect = (mousePosition.Y - yOffset) / tileSize;
-            return new Point(xSelect, ySelect);
+            
+            // Get the offset values within the tile
+            int xSelectOffset = (mousePosition.X - xOffset) % tileWidth;
+            int ySelectOffset = (mousePosition.Y - yOffset) % tileSize;
+
+            // Determine the correct tile with the mask bitmap
+            Rectangle maskSource = new Rectangle(xSelectOffset, ySelectOffset, 1, 1);
+            Color[] retrievedColor = new Color[1];
+            mask.GetData<Color>(0, maskSource, retrievedColor, 0, 1);
+            
+            // Mask color coding:
+            // Color.Black == Center
+            // Color.Red == Top Left
+            // Color.Green == Bottom Left
+            // Color.Blue == Top Right
+            // Color.Yellow == Bottom Right
+            Point p = new Point(xSelect, ySelect);
+            if (retrievedColor[0] == Color.Green)
+            {
+                --p.X;
+                ++p.Y;
+            }
+            else if (retrievedColor[0] == Color.Yellow)
+            {
+                ++p.X;
+                ++p.Y;
+            }
+            else if (retrievedColor[0] == Color.Red)
+            {
+                --p.X;
+            }
+            else if (retrievedColor[0] == Color.Blue)
+            {
+                ++p.X;
+            }
+            // else it's black, no need to change...
+
+            return p;
         }
 
         /// <summary>
