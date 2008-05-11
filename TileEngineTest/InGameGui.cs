@@ -14,18 +14,29 @@ namespace TileEngineTest
     {
         SpriteFont font;
         HexagonTiledBackground tiledBackground;
+        Point selected;
         SpriteBatch spriteBatch;
 
         public InGameGui(Game game, HexagonTiledBackground tiledBackground)
             : base(game)
         {
             this.tiledBackground = tiledBackground;
+            if (tiledBackground != null)
+            {
+                tiledBackground.SelectionChanged += RetrieveSelectedPoint;
+            }
+            selected = new Point(0, 0);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
         }
         
         public InGameGui(Game game)
             : this(game, null)
         {
+        }
+
+        protected void RetrieveSelectedPoint(object sender, SelectedTileEventArgs e)
+        {
+            selected = e.Point;
         }
 
         protected override void LoadContent()
@@ -39,8 +50,7 @@ namespace TileEngineTest
         {
             spriteBatch.Begin();
 
-            Point selected = tiledBackground.SelectedTile;
-            spriteBatch.DrawString(font, "Hai Wurldz. You have selected tile " + selected.X + "," + selected.Y + ".", new Vector2(1.0f, 1.0f), Color.Black);
+            spriteBatch.DrawString(font, "You have selected tile " + selected.X + "," + selected.Y + ".", new Vector2(1.0f, 1.0f), Color.Black);
             spriteBatch.End();
 
             base.Draw(gameTime);

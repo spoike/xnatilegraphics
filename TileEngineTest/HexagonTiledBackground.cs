@@ -10,8 +10,26 @@ using Microsoft.Xna.Framework.Content;
 
 namespace TileEngineTest
 {
+    public class SelectedTileEventArgs : EventArgs
+    {
+        private Point p;
+        public SelectedTileEventArgs(Point p)
+        {
+            this.p = p;
+        }
+        public Point Point
+        {
+            get
+            {
+                return p;
+            }
+        }
+    }
+
     public class HexagonTiledBackground : Microsoft.Xna.Framework.DrawableGameComponent
     {
+        public event EventHandler<SelectedTileEventArgs> SelectionChanged;
+
         private TileGraphic tiles;
         private Texture2D selection;
         private Texture2D mask;
@@ -119,6 +137,7 @@ namespace TileEngineTest
                 {
                     selected = Select(mousePosition);
                     MutateTile(selected);
+                    OnRaiseSelection(new SelectedTileEventArgs(selected));
                 }
                 isPressed = true;
             }
@@ -128,6 +147,19 @@ namespace TileEngineTest
             }
 
             base.Update(gameTime);
+        }
+
+        protected void OnRaiseSelection(SelectedTileEventArgs e)
+        {
+            // A copy of the EventHandler avoids possibility of a
+            // race condition.
+            EventHandler<SelectedTileEventArgs> handler = SelectionChanged;
+
+            // If there are no subscribers then there will be no handler.
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         /// <summary>
@@ -151,14 +183,6 @@ namespace TileEngineTest
             int x = selected.X;
             int y = selected.Y;
             tileContent[x, y] = tileContent[x, y] + 1;
-        }
-
-        public Point SelectedTile
-        {
-            get
-            {
-                return selected;
-            }
         }
     }
 }
